@@ -80,21 +80,20 @@ function jsonSelection (jsonData) {
 
     var jsonResponse = []
 
-    console.log('Selected thread ids: '+ selectThreads);
+    //console.log('Selected thread ids: '+ selectThreads);
     var threadsObj = {threads: []}
 
     for (var thread  in selectThreads) {
         var threadObj  = jsonData.threads[selectThreads[thread]];
-        console.log('Thread object: '+JSON.stringify(threadObj));
         var newThread = {
-            imageUrl: threadObj.imgurl,
+            imgurl: threadObj.imgurl,
             sub: threadObj.sub,
             teaser: threadObj.teaser
         }
         threadsObj.threads.push(newThread);           
     }
 
-    //console.log('Threads object: '+JSON.stringify(threadsObj))
+    // console.log('Threads object: '+JSON.stringify(threadsObj))
 
     return JSON.stringify(threadsObj);
 }
