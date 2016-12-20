@@ -24,11 +24,20 @@ function addButtons(threads) {
         var imgUrl = 'http://i.4cdn.org/his/' + thread.imgurl + 's.jpg'
         $('#pictureBlock').append("<div class=clickableImage id="+thread.id+ "><img src="+imgUrl+" /> </div>");
     }
+    imageHandler(correctThread.id);
 };
 
-$('.clickableImage').click(function () {
-    alert('handler for clickable image called');
-});
+function imageHandler (correctId) {
+        $('.clickableImage').click(function () {
+            if ($(this).attr('id') == correctId) {
+                alert('You have chosen well');
+            }
+            else {
+                alert('You have chosen poorly');
+            }
+        //alert($(this).attr('id') + 'handler for clickable image called');
+    });
+};
 
 
 /*$('.clickableImage').on('click', function () {
