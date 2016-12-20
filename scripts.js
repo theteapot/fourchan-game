@@ -22,7 +22,7 @@ function addButtons(threads) {
         //console.log(JSON.stringify(threads[index]))
         var thread = threads[index]
         var imgUrl = 'http://i.4cdn.org/his/' + thread.imgurl + 's.jpg'
-        $('#pictureBlock').append("<div class=clickableImage id="+thread.id+ "><img src="+imgUrl+" /> </div>");
+        $('#pictureBlock').append("<div class=clickableImage id="+thread.id+"  ><img src="+imgUrl+" /> </div>");
     }
     imageHandler(correctThread.id);
 };
