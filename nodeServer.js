@@ -85,7 +85,9 @@ function jsonSelection (jsonData) {
 
     for (var thread  in selectThreads) {
         var threadObj  = jsonData.threads[selectThreads[thread]];
+        console.log(JSON.stringify(threadObj));
         var newThread = {
+            id: threadObj.lr.id,
             imgurl: threadObj.imgurl,
             sub: threadObj.sub,
             teaser: threadObj.teaser
@@ -93,7 +95,7 @@ function jsonSelection (jsonData) {
         threadsObj.threads.push(newThread);           
     }
 
-    // console.log('Threads object: '+JSON.stringify(threadsObj))
+    console.log('Threads object: '+JSON.stringify(threadsObj))
 
     return JSON.stringify(threadsObj);
 }

@@ -1,7 +1,7 @@
 
 $.ajax('http://localhost:3001/', {
     success: function (data, status, res) {
-        console.log(status, res);
+        console.log('Status: '+status);
         addButtons(data.threads);
     },
     error: function (res, status, error) {
@@ -12,14 +12,30 @@ $.ajax('http://localhost:3001/', {
 function addButtons(threads) {
     
     var randIndex = Math.floor(Math.random() * threads.length);
-    $('#promptText').append(threads[randIndex].teaser);
+    var correctThread = threads[randIndex]
 
-    console.log(threads);
+    //console.log(JSON.stringify(correctThread));
+    $('#promptText').append(correctThread.teaser);
+
+    //console.log(threads);
     for (var index in threads) {
-        console.log(JSON.stringify(threads[index]))
+        //console.log(JSON.stringify(threads[index]))
         var thread = threads[index]
         var imgUrl = 'http://i.4cdn.org/his/' + thread.imgurl + 's.jpg'
-        $('#pictureBlock').append("<img src="+imgUrl+" />");
+        $('#pictureBlock').append("<div class=clickableImage id="+thread.id+ "><img src="+imgUrl+" /> </div>");
     }
 };
+
+$('.clickableImage').click(function () {
+    alert('handler for clickable image called');
+});
+
+
+/*$('.clickableImage').on('click', function () {
+        if ( $(this).attr('id') === correctThread.id ) {
+            console.log('Chose correct: '+$(this).attr('id')+'=='+correctThread.id);
+        } else {
+            console.log('Chose incorrect: '+$(this).attr('id')+'=='+correctThread.id)
+        }
+});*/
 
