@@ -3,31 +3,33 @@ var jsdom = require('jsdom');
 var http = require('http');
 var fs = require('fs');
 
-http.get('http://boards.4chan.org/his/catalog', function(res) {
+function getHttp(callback) {
+    http.get('http://boards.4chan.org/his/catalog', function(res) {
 
-    let error;
-    if (res.statusCode !== 200) {
-        error = new Error('Request Failed. Status Code: '+res.statusCode);
-    } else if (!/text\/html/.test(res.headers['content-type'])) {
-        error = new Error('Invalid content type. Expected text/html but recieved '+res.headers['content-type']);
-    }
-    if (error) {
-        console.log(error.message);
-        res.resume();
-        return;
-    } 
-
-    res.setEncoding('utf8');
-    let rawData = '';
-    res.on('data', (chunk) => rawData += chunk);
-    res.on('end', () => {
-        try {
-            parseHtml(rawData);
-        } catch (e) {
-            console.log(e.message);
+        let error;
+        if (res.statusCode !== 200) {
+            error = new Error('Request Failed. Status Code: '+res.statusCode);
+        } else if (!/text\/html/.test(res.headers['content-type'])) {
+            error = new Error('Invalid content type. Expected text/html but recieved '+res.headers['content-type']);
         }
+        if (error) {
+            console.log(error.message);
+            res.resume();
+            return;
+        } 
+
+        res.setEncoding('utf8');
+        let rawData = '';
+        res.on('data', (chunk) => rawData += chunk);
+        res.on('end', () => {
+            try {
+                callback(parseHtml(rawData));
+            } catch (e) {
+                console.log(e.message);
+            }
+        });
     });
-});
+};
 
 function parseHtml (rawData) {
     jsdom.env ( 
@@ -51,7 +53,6 @@ function showLinks (document) {
     
     jsonSelection(jsonData)
 
-    startServer(jsonData)
 }
 
 function startServer (jsonData) {
@@ -100,6 +101,9 @@ function jsonSelection (jsonData) {
     return JSON.stringify(threadsObj);
 }
 
+getHttp(function(response) {
+    console.log('Called from callback: '+JSON.stringify(response));
+});
 
 
 
