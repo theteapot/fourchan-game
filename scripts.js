@@ -1,13 +1,20 @@
 
-$.ajax('http://localhost:3001/', {
-    success: function (data, status, res) {
-        console.log('Status: '+status);
-        addButtons(data.threads);
-    },
-    error: function (res, status, error) {
-        console.log(status, error);
-    }
-});
+function makeRequest() {
+    $.ajax({
+        url: 'http://localhost:3001/',
+        type: 'GET',
+        data: {shortUrl: 'his'},
+        contentType: 'jsonp',
+        crossdomain: true,
+        success: function (data, status, res) {
+            console.log('Status: '+status);
+            addButtons(data.threads);
+        },
+        error: function (res, status, error) {
+            console.log(status, error);
+        }
+    });
+}
 
 function addButtons(threads) {
     
@@ -15,7 +22,7 @@ function addButtons(threads) {
     var correctThread = threads[randIndex]
 
     //console.log(JSON.stringify(correctThread));
-    $('#promptText').append(correctThread.teaser);
+    $('#promptText').text(correctThread.teaser);
 
     //console.log(threads);
     for (var index in threads) {
@@ -28,23 +35,19 @@ function addButtons(threads) {
 };
 
 function imageHandler (correctId) {
-        $('.clickableImage').click(function () {
-            if ($(this).attr('id') == correctId) {
-                alert('You have chosen well');
-            }
-            else {
-                alert('You have chosen poorly');
-            }
-        //alert($(this).attr('id') + 'handler for clickable image called');
-    });
-};
-
-
-/*$('.clickableImage').on('click', function () {
-        if ( $(this).attr('id') === correctThread.id ) {
-            console.log('Chose correct: '+$(this).attr('id')+'=='+correctThread.id);
-        } else {
-            console.log('Chose incorrect: '+$(this).attr('id')+'=='+correctThread.id)
+    $('.clickableImage').click(function () {
+        if ($(this).attr('id') == correctId) {
+            $(this).wrap("<div class='correctTint'></div>");
         }
-});*/
+        else {
+            $(this).wrap("<div class='incorrectTint'></div>")
+        }      
+     });
+}
+
+$(document).on("click", "#goButton", function() {
+    $('#pictureBlock').empty();
+    makeRequest();
+})
+
 

@@ -2,8 +2,12 @@ var $ = require('jquery');
 var jsdom = require('jsdom');
 var http = require('http');
 var fs = require('fs');
+var connect = require('connect');
+var serveStatic = require('serve-static');
 
-function getHttp(callback) {
+getHttp()
+
+function getHttp() {
     http.get('http://boards.4chan.org/his/catalog', function(res) {
 
         let error;
@@ -23,7 +27,7 @@ function getHttp(callback) {
         res.on('data', (chunk) => rawData += chunk);
         res.on('end', () => {
             try {
-                callback(parseHtml(rawData));
+                parseHtml(rawData);
             } catch (e) {
                 console.log(e.message);
             }
@@ -51,14 +55,15 @@ function showLinks (document) {
     console.log('Starting JSON parsing');
     var jsonData = JSON.parse(catalogScript.slice(jsonBegin, jsonEnd))
     
-    jsonSelection(jsonData)
+    startServer(jsonData);
+    
 
 }
 
 function startServer (jsonData) {
-    console.log('Starting server');
+   console.log('Starting server');
     http.createServer(function (req, res) {
-        res.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'});
+        res.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type'});
         res.end(jsonSelection(jsonData));
         console.log('Sending response');
     }).listen(3001);
@@ -100,12 +105,6 @@ function jsonSelection (jsonData) {
 
     return JSON.stringify(threadsObj);
 }
-
-getHttp(function(response) {
-    console.log('Called from callback: '+JSON.stringify(response));
-});
-
-
 
 
 
